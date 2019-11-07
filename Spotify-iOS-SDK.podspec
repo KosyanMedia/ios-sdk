@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.platform              = :ios
   s.swift_version         = '5.1'
   s.ios.deployment_target = '11.0'
-  s.source_files          = ['Empty.m']
+  s.source_files          = ['Empty.m', 'SpotifyiOS.framework/Headers/*.h']
   s.vendored_frameworks   = ['SpotifyiOS.framework']
   s.prepare_command       = "touch Empty.m"
 end
