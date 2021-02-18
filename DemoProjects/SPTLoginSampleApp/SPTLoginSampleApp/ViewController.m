@@ -1,7 +1,21 @@
+// Copyright 2017-present Spotify AB
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #import "ConnectView.h"
 #import "ViewController.h"
 
-static NSString * const SpotifyClientID = @"044b2c45e77f45aca8da89e338849b6a";
+static NSString * const SpotifyClientID = @"<#ClientID#>";
 static NSString * const SpotifyRedirectURLString = @"spotify-login-sdk-test-app://spotify-login-callback";
 
 @interface ViewController ()
@@ -18,12 +32,6 @@ static NSString * const SpotifyRedirectURLString = @"spotify-login-sdk-test-app:
      */
     SPTConfiguration *configuration = [SPTConfiguration configurationWithClientID:SpotifyClientID
                                                                       redirectURL:[NSURL URLWithString:SpotifyRedirectURLString]];
-
-    // Set these url's to your backend which contains the secret to exchange for an access token
-    // You can use the provided ruby script spotify_token_swap.rb for testing purposes
-    configuration.tokenSwapURL = [NSURL URLWithString: @"http://localhost:1234/swap"];
-    configuration.tokenRefreshURL = [NSURL URLWithString: @"http://localhost:1234/refresh"];
-
     /*
      The session manager lets you authorize, get access tokens, and so on.
      */
@@ -92,18 +100,20 @@ static NSString * const SpotifyRedirectURLString = @"spotify-login-sdk-test-app:
                                 message:(NSString *)message
                             buttonTitle:(NSString *)buttonTitle
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
-                                                                             message:message
-                                                                      preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:buttonTitle
-                                                            style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * _Nonnull action) {
-        [alertController dismissViewControllerAnimated:YES completion:nil];
-    }];
-    [alertController addAction:dismissAction];
-    [self presentViewController:alertController
-                       animated:YES
-                     completion:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
+                                                                                 message:message
+                                                                          preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:buttonTitle
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * _Nonnull action) {
+            [alertController dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alertController addAction:dismissAction];
+        [self presentViewController:alertController
+                           animated:YES
+                         completion:nil];
+    });
 }
 
 @end
